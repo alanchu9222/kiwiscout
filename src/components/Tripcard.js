@@ -25,11 +25,11 @@ class Tripcard extends Component {
   }
   // The click handle will not respond if the user selected delete icon or update icon
   clickHandler = () => {
-    this.props.clickHandler(this.props.city);
+    this.props.clickHandler(this.props.city, this.props.docId);
   };
   deleteHandler = event => {
     event.stopPropagation();
-    this.props.deleteHandler(this.props.city);
+    this.props.deleteHandler(this.props.docId);
   };
   month = monthSelected => {
     const m = [
@@ -50,7 +50,7 @@ class Tripcard extends Component {
   };
   editHandler = event => {
     event.stopPropagation();
-    this.props.editHandler(this.props.city);
+    this.props.editHandler(this.props.docId);
   };
   formatDate = dateSeconds => {
     const dateObj = new Date(dateSeconds * 1000);
@@ -160,8 +160,8 @@ class Tripcard extends Component {
         </div>
 
         <div className="Tripcard-data">
-          {this.formatDate(this.props.startDate)}-
-          {this.formatDate(this.props.endDate)}
+          {this.formatDate(this.props.startDate)}
+          {/* {this.formatDate(this.props.endDate)} */}
         </div>
       </div>
     );

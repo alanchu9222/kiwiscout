@@ -1,3 +1,6 @@
+import { connect } from "react-redux";
+import { setIsLoggedIn } from "../actions";
+
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
@@ -40,7 +43,7 @@ class U_signup extends Component {
     this.setState({ spinner: "spinner" });
 
     // Signup user
-    this.props.auth
+    this.props.firebase.auth
       .createUserWithEmailAndPassword(email, password)
       .then(cred => {
         this.setState({ spinner: "" });
@@ -74,7 +77,7 @@ class U_signup extends Component {
           />
           <form
             className={this.state.spinner}
-            autocomplete="off"
+            autoComplete="off"
             id="signup-form"
             ref={this.signupForm}
             onSubmit={this.handleSubmit}
@@ -85,14 +88,14 @@ class U_signup extends Component {
                 onChange={this.handleChangeEmail}
                 value={this.state.email}
                 id="signup-email"
-                autocomplete="off"
+                autoComplete="off"
                 required
               />
               <label htmlFor="signup-email">Email address</label>
             </div>
             <div className="input-field">
               <input
-                autocomplete="new-password"
+                autoComplete="new-password"
                 type="password"
                 onChange={this.handleChangePassword}
                 value={this.state.password}
@@ -112,4 +115,12 @@ class U_signup extends Component {
   }
 }
 
-export default U_signup;
+//export default U_signup;
+
+const mapStateToProps = state => {
+  return { firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  { setIsLoggedIn }
+)(U_signup);

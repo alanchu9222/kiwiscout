@@ -1,42 +1,50 @@
+import { connect } from "react-redux";
+import {
+  setCardsVisible,
+  loadDataExternal,
+  placesInitialise,
+  saveDataLocalStorage,
+  initialiseFirebase
+} from "./actions";
+
 import React from "react";
 import NavBar from "./components/NavBar";
 import TravelPlan from "./components/TravelPlan";
 import TravelCards from "./components/TravelCards";
+import Instructions from "./components/Instructions";
+
 import { DB_CONFIG } from "./config/config";
 import app from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
+
 import Flash from "./components/Flash";
 import Update from "./components/U_update";
 import Delete from "./components/U_delete";
 import "./components/Flash.css";
-import "firebase/auth";
-import "firebase/firestore";
 import "./App.css";
-
 class App extends React.Component {
   constructor(props) {
     super(props);
     app.initializeApp(DB_CONFIG);
     this.db = app.firestore();
     this.auth = app.auth();
+    this.props.initialiseFirebase(this.db, this.auth);
     this.navBar = React.createRef();
-    this.modalDelete = React.createRef();
-    this.modalUpdate = React.createRef();
-    this.travelCards = React.createRef();
-    this.travelPlan = React.createRef();
   }
   state = {
     user: "",
-    isLoggedIn: false,
     auth: null,
     db: null,
-    flashMessage: "Welcome to the World Travel Guide - please log in to begin",
+    flashMessage: "Welcome to the Local Travel Guide - please log in to begin",
     menuOptions: [],
     tripDates: [],
-    citySelected: "",
     countrySelected: "",
     excludeDates: [],
-    minStartDate: ""
+    minStartDate: "",
+    cardsVisible: true
   };
+
   setTripDates = dates => {
     // Each date element is a pair of startdate and enddate objects
     this.setState({ tripDates: dates });
@@ -117,62 +125,24 @@ class App extends React.Component {
   setUser = user => {
     this.setState({ user: user });
   };
-  setPlace = city => {
-    this.setState({ citySelected: city });
-    // Get local info for this place
-    this.refs.travelPlan.setPlace(city, this.state.countrySelected);
-  };
-
-  setIsLoggedIn = isLoggedIn => {
-    this.setState({ isLoggedIn: isLoggedIn });
-  };
-
-  setMenuOptions = (list, country, imageUrl) => {
-    // A list of locations to be added to the navbar and sidebar
-    this.setState({
-      menuOptions: list,
-      imageUrl: imageUrl,
-      citySelected: list[0],
-      countrySelected: country
-    });
-    // Get local info for this place
-    this.refs.travelPlan.setPlace(list[0], country);
-  };
-
-  setRefresh = () => {
-    this.travelCards.current.updateCards();
-    this.setState({ refresh: true });
-  };
   setFlashMessage = message => {
     this.setState({ flashMessage: message });
   };
 
-  deleteCompleted = result => {
-    // This will trigger the trips displayed to be updated
-    //this.setState({ deleteInProgress: false });
-    if (result) {
-      console.log("Delete succesful");
-      this.travelCards.current.updateCards();
-    } else {
-      console.log("Delete failed");
-    }
-  };
+  componentDidMount() {
+    this.props.placesInitialise();
+  }
 
-  // This will trigger the delete process
-  deleteTrip = tripRecord => {
-    // The ref must be called with the "current" attribute!!!
-    this.modalDelete.current.setPlaceDelete(tripRecord);
-    //this.setState({ deleteInProgress: true });
-  };
-  // This will trigger the update process
-  updateTrip = tripRecord => {
-    // The ref must be called with the "current" attribute!!!
-    this.modalUpdate.current.setPlaceUpdate(tripRecord);
-  };
-
-  componentDidUpdate() {
+  componentDidUpdate(prevProps) {
     if (this.state.refresh === true) {
       this.setState({ refresh: false });
+    }
+    //    SAVE_LOCALSTORAGE - if a key is provided, then save the local storage
+    if (this.props.places.updateLocalStorage) {
+      this.props.saveDataLocalStorage(
+        this.props.places.updateLocalStorage,
+        this.props.places.currentData
+      );
     }
   }
   render() {
@@ -180,54 +150,36 @@ class App extends React.Component {
       <div className="App-main">
         <NavBar
           ref={this.navBar}
-          setFlashMessage={this.setFlashMessage}
           setState={this.updateAuthState}
-          isLoggedIn={this.state.isLoggedIn}
-          setIsLoggedIn={this.setIsLoggedIn}
+          setFlashMessage={this.setFlashMessage}
+          cardsVisible={this.state.cardsVisible}
           menuOptions={this.state.menuOptions}
           imageUrl={this.state.imageUrl}
-          auth={this.auth}
-          db={this.db}
+          //auth={this.auth}
+          //db={this.db}
           excludeDates={this.state.excludeDates}
           minStartDate={this.state.minStartDate}
           tripDates={this.state.tripDates}
           setUser={this.setUser}
-          setPlace={this.setPlace}
-          refresh={this.setRefresh}
+          // setPlace={this.setPlace}
+          //refresh={this.setRefresh}
         />
-
-        {/* <Seed db={this.db} /> */}
         <Flash message={this.state.flashMessage} />
-        <div className={this.state.isLoggedIn ? "show" : "hide"}>
-          <Delete
-            ref={this.modalDelete}
-            db={this.db}
-            deleteCompleted={this.deleteCompleted}
-          />
-          <Update
-            ref={this.modalUpdate}
-            db={this.db}
-            refresh={this.setRefresh}
-          />
+        <div className={this.props.firebase.isLoggedIn ? "hide" : "show"}>
+          <Instructions />
+        </div>
+        <div className={this.props.firebase.isLoggedIn ? "show" : "hide"}>
+          <Delete/>
+          <Update/>
 
           <TravelCards
-            ref={this.travelCards}
-            setMenuOptions={this.setMenuOptions}
-            setCountry={this.setCountry}
             setTripDates={this.setTripDates}
             user={this.state.user}
-            isLoggedIn={this.state.isLoggedIn}
-            db={this.db}
-            performDelete={this.deleteTrip}
-            performUpdate={this.updateTrip}
           />
-
           <TravelPlan
             className="travel-plan"
             ref="travelPlan"
             user={this.state.user}
-            auth={this.auth}
-            db={this.db}
           />
         </div>
       </div>
@@ -235,4 +187,18 @@ class App extends React.Component {
   }
 }
 
-export default App;
+//export default App;
+
+const mapStateToProps = state => {
+  return { cards: state.cards, places: state.places, firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  {
+    setCardsVisible,
+    loadDataExternal,
+    placesInitialise,
+    saveDataLocalStorage,
+    initialiseFirebase
+  }
+)(App);

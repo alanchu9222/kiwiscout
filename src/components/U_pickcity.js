@@ -18,6 +18,11 @@ export class PickCity extends Component {
     };
   }
 
+  reset = () => {
+    this.setState({ selected: "" });
+    this.shortlistCities("");
+  };
+
   renderOptions() {
     return this.state.shortlist.map(city => {
       return (
@@ -28,14 +33,6 @@ export class PickCity extends Component {
     });
   }
 
-  // handleClose = () => {
-  //   this.setState({ open: false });
-  // };
-
-  // handleOpen = () => {
-  //   this.setState({ open: true });
-  // };
-
   shortlistCities = country => {
     const countrySelected = country.slice(0, 10);
     let shortlist = this.state.data.filter(
@@ -44,7 +41,8 @@ export class PickCity extends Component {
     const sl = shortlist.map(item => {
       return item.name;
     });
-    this.setState({ shortlist: sl });
+
+    this.setState({ shortlist: sl.sort() });
   };
 
   handleChange = event => {

@@ -1,7 +1,14 @@
+import { connect } from "react-redux";
+import { refreshCards, setTripId } from "../actions";
+
+import unsplash from "../apis/unsplash";
+// import geolocationApi from "../apis/geolocation";
+// import { LOCATIONIQ_KEY } from "../apis/apikeys";
+
 import React, { Component } from "react";
 import PickCountry from "./U_pickcountry";
 import PickCity from "./U_pickcity";
-import unsplash from "./Unsplash";
+//import unsplash from "./Unsplash";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
 
@@ -10,6 +17,22 @@ import PickDate from "./U_pickdate";
 import M from "materialize-css";
 const defaultImage =
   "https://images.freeimages.com/images/large-previews/1f8/delicate-arch-1-1391746.jpg";
+const initialState = {
+  dataReady: false,
+  imageFound: false,
+  countrySearch: false,
+  city: "",
+  country: "",
+  poi1: "",
+  poi2: "",
+  poi3: "",
+  poi4: "",
+  dateStart: "",
+  dateEnd: "",
+  imgUrl: defaultImage,
+  places: [],
+  coordinates: {}
+};
 
 class U_create extends Component {
   static defaultProps = {
@@ -22,23 +45,7 @@ class U_create extends Component {
     this.pickCity = React.createRef();
     this.pickDate = React.createRef();
 
-    this.state = {
-      dataReady: false,
-      imageFound: false,
-      countrySearch: false,
-
-      city: "",
-      country: "",
-      poi1: "",
-      poi2: "",
-      poi3: "",
-      poi4: "",
-      dateStart: "",
-      dateEnd: "",
-      imgUrl: defaultImage,
-      places: [],
-      coordinates: []
-    };
+    this.state = initialState;
   }
   getWeatherForecast = () => {};
   documentLoadedEventHandler = () => {
@@ -62,6 +69,9 @@ class U_create extends Component {
   }
   resetCreateForm = () => {
     this.pickCountry.current.reset();
+    this.pickCity.current.reset();
+    this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
+    this.setState(initialState);
   };
 
   searchImage = async term => {
@@ -101,12 +111,19 @@ class U_create extends Component {
       dateEnd: end
     });
   };
-
+  capitalize = s => {
+    if (typeof s !== "string") return "";
+    //return s.charAt(0).toUpperCase() + s.slice(1);
+    return s
+      .toLowerCase()
+      .split(" ")
+      .map(s => s.charAt(0).toUpperCase() + s.substring(1))
+      .join(" ");
+  };
   handlePlaceChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: this.capitalize(event.target.value) });
   };
   showDates = () => {
-    alert("now showing dates");
     console.log(this.props.tripDates);
   };
   formatString = text => {
@@ -114,6 +131,48 @@ class U_create extends Component {
     word = word.charAt(0).toUpperCase() + word.slice(1);
     return word;
   };
+
+  getImageUrl = async (city, docRef) => {
+    const searchString =
+      "https://api.unsplash.com/search/photos?per_page=1&order_by='popular'";
+    const response = await unsplash.get(searchString, {
+      params: { query: city }
+    });
+    try {
+      docRef.update({ imageUrl: response.data.results[0].urls.small });
+    } catch (error) {
+      // Nothing found for city, try country instead
+      const response2 = await unsplash.get(searchString, {
+        params: { query: city }
+      });
+      try {
+        docRef.update({ imgUrl: response2.data.results[0].urls.small });
+      } catch (error) {
+        // Nothing found again: use default image
+        docRef.update({ imgUrl: defaultImage });
+      }
+    }
+  };
+
+  // getCoordinates = async (location, country, docRef) => {
+  //   if (location.trim().length === 0) return;
+  //   try {
+  //     const resp = await geolocationApi.get(
+  //       `${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
+  //     );
+  //     const newkey = `${location}-${country}`;
+  //     let newcoordinates = this.state.coordinates;
+  //     newcoordinates[newkey] = {
+  //       latitude: resp.data[0].lat,
+  //       longitude: resp.data[0].lon
+  //     };
+  //     docRef.update({
+  //       coordinates: newcoordinates
+  //     });
+  //   } catch (err) {
+  //     console.log(err.message);
+  //   }
+  // };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -126,7 +185,7 @@ class U_create extends Component {
     //   return;
     // }
     // Update database with the latest weather information
-    this.props.db
+    this.props.firebase.db
       .collection("trips")
       .add({
         city: this.state.city,
@@ -139,7 +198,17 @@ class U_create extends Component {
         place3: this.formatString(this.state.poi3),
         place4: this.formatString(this.state.poi4)
       })
-      .then(() => {
+      .then(result => {
+        console.log("Create record successful");
+
+        const docRef = this.props.firebase.db
+          .collection("trips")
+          .doc(result.id);
+        // Select the new card
+        this.props.setTripId(result.id);
+
+        this.getImageUrl(this.state.city, docRef);
+
         console.log(
           "Successfully saved record for " +
             this.state.city +
@@ -150,15 +219,15 @@ class U_create extends Component {
         this.setState({ city: "", country: "" });
         // close the create modal & reset form
         const modal = document.querySelector("#modal-create");
-
+        this.setState({ poi1: "", poi2: "", poi3: "", poi4: "" });
         M.Modal.getInstance(modal).close();
-
-        this.props.refresh();
-        //this.createForm.reset();
+        this.props.refreshCards(
+          this.props.firebase.db,
+          this.props.cards.trip_id_selected
+        );
       })
       .catch(err => {
-        console.log(err.message);
-        alert("Error saving document " + err.message);
+        console.log("Error saving document " + err.message);
       });
   };
 
@@ -214,9 +283,9 @@ class U_create extends Component {
                   id="create_poi2"
                   className="materialize-textarea"
                   onChange={this.handlePlaceChange}
-                  name="create_poi2"
+                  name="poi2"
                 />
-                <label htmlFor="content">Place of Interest 2</label>
+                <label htmlFor="create_poi2">Place of Interest 2</label>
               </div>
               <div className="spacer" />
 
@@ -252,4 +321,11 @@ class U_create extends Component {
   }
 }
 
-export default U_create;
+//export default U_create;
+const mapStateToProps = state => {
+  return { cards: state.cards, firebase: state.firebase };
+};
+export default connect(
+  mapStateToProps,
+  { refreshCards, setTripId }
+)(U_create);
