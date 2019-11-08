@@ -40,9 +40,6 @@ class U_login extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    if (this.props.sideMenu) {
-      this.props.sideMenu.close();
-    }
     // get user info
     const email = this.state.email;
     const password = this.state.password;

@@ -2,10 +2,6 @@ import tomtom from "../apis/tomtom";
 import { TOMTOM_KEY } from "../apis/apikeys";
 import locationiq from "../apis/geolocation";
 import { LOCATIONIQ_KEY } from "../apis/apikeys";
-// import app from "firebase/app";
-// import { DB_CONFIG } from "../config/config";
-// import "firebase/auth";
-// import "firebase/firestore";
 
 import {
   SET_IS_LOGGED_IN,

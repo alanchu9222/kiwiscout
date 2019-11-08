@@ -123,9 +123,6 @@ class U_create extends Component {
   handlePlaceChange = event => {
     this.setState({ [event.target.name]: this.capitalize(event.target.value) });
   };
-  showDates = () => {
-    console.log(this.props.tripDates);
-  };
   formatString = text => {
     let word = text.toLowerCase();
     word = word.charAt(0).toUpperCase() + word.slice(1);

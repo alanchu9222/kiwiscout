@@ -1,5 +1,6 @@
 import { connect } from "react-redux";
 import {
+  setPlacesMenu,
   initialiseFirebase,
   placesInitialise,
   setCardsVisible,
@@ -28,12 +29,7 @@ class NavBar extends Component {
     this.db = app.firestore();
     this.auth = app.auth();
     this.props.initialiseFirebase(this.db, this.auth);
-
     this.createModal = React.createRef();
-    this.state = {
-      menuOptions: [],
-      sideMenu: ""
-    };
   }
 
   static defaultProps = {
@@ -41,7 +37,7 @@ class NavBar extends Component {
     menuItems: [
       {
         list_id: "create",
-        menu_id: "",
+        menu_id: "create-button",
         target: "modal-create",
         description: "Add Destination",
         show_when: "logged-in",
@@ -49,7 +45,7 @@ class NavBar extends Component {
       },
       {
         list_id: "login",
-        menu_id: "",
+        menu_id: "login-button",
         target: "modal-login",
         description: "Login",
         remove_when_nocards: false,
@@ -57,7 +53,7 @@ class NavBar extends Component {
       },
       {
         list_id: "signup",
-        menu_id: "",
+        menu_id: "signup-button",
         target: "modal-signup",
         description: "Sign Up",
         remove_when_nocards: false,
@@ -65,22 +61,19 @@ class NavBar extends Component {
       }
     ]
   };
-  // initDatePicker = minStartDate => {
-  //   //    this.createModal.current.initDatePicker(minStartDate);
-  // };
-  componentDidUpdate(prevProps) {
-    if (prevProps.menu.places !== this.props.menu.places) {
-      this.setState({ menuOptions: this.props.menu.places });
-    }
-  }
+
+  // componentDidUpdate(prevProps) {
+  //   if (prevProps.menu.places !== this.props.menu.places) {
+  //     this.setState({ menuOptions: this.props.menu.places });
+  //   }
+  // }
 
   componentDidMount() {
     this.props.placesInitialise();
 
     document.addEventListener("DOMContentLoaded", function() {
       const sideNav = document.querySelector(".sidenav");
-      const sideMenu = M.Sidenav.init(sideNav, {});
-      this.setState = { sideMenu: M.Modal.getInstance(sideMenu) };
+      M.Sidenav.init(sideNav, {});
     });
   }
   handleSideMenuClick = event => {
@@ -195,15 +188,13 @@ class NavBar extends Component {
       menuItems = menuItems.filter(item => item.remove_when_nocards === false);
     }
     //    cardsVisible
-    //ACDEBUG
-    console.log("---------------------------------------------");
-    console.log("Menu items length:" + menuItems.length);
     return menuItems;
   };
   // handle logout
   handleLogout = () => {
     this.props.firebase.auth.signOut();
-    this.setState({ menuOptions: [] });
+    //    this.setState({ menuOptions: [] });
+    this.props.setPlacesMenu([]);
     this.props.setIsLoggedIn(false);
     // this.props.setUser("");
   };
@@ -241,7 +232,8 @@ class NavBar extends Component {
                 )}
                 {this.props.firebase.isLoggedIn &&
                   !this.props.cards.cardsVisible &&
-                  this.state.menuOptions.map(this.showMenuPlace)}
+                  this.props.menu.places.map(this.showMenuPlace)}
+                {/* this.state.menuOptions.map(this.showMenuPlace)} */}
                 {this.currentMenuItems().map(this.showMenuItem)}
                 {this.props.firebase.isLoggedIn && (
                   <li>
@@ -288,7 +280,10 @@ class NavBar extends Component {
           )}
           {this.props.firebase.isLoggedIn &&
             !this.props.cards.cardsVisible &&
-            this.state.menuOptions.map(this.showMenuPlaceSide)}
+            this.props.menu.places.map(this.showMenuPlaceSide)}
+
+          {/* this.state.menuOptions.map(this.showMenuPlaceSide)} */}
+
           {this.currentMenuItems().map(this.showSideMenuItem)}
           {this.props.firebase.isLoggedIn && (
             <li>
@@ -319,6 +314,7 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
+    setPlacesMenu,
     initialiseFirebase,
     placesInitialise,
     setCardsVisible,
