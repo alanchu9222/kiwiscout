@@ -29,7 +29,6 @@ class NavBar extends Component {
     this.db = app.firestore();
     this.auth = app.auth();
     this.props.initialiseFirebase(this.db, this.auth);
-    this.createModal = React.createRef();
   }
 
   static defaultProps = {
@@ -248,7 +247,7 @@ class NavBar extends Component {
         // Modals */}
         <Login id="modal-login" />
         <SignUp id="modal-signup" />
-        <Create ref={this.createModal} id="modal-create" />
+        <Create id="modal-create" />
         {/* // ---------------------------------------------------------------------
         // Sidenav */}
         <ul className="sidenav" id="mobile-nav">

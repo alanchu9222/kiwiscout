@@ -7,7 +7,7 @@ import TravelCards from "../components/TravelCards";
 import Flash from "../components/Flash";
 import Update from "../components/U_update";
 import Delete from "../components/U_delete";
-
+let wrapped;
 beforeEach(() => {
   wrapped = shallow(<App />);
 });
