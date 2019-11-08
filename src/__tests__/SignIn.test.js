@@ -8,7 +8,9 @@ import Flash from "../components/Flash";
 import Update from "../components/U_update";
 import Delete from "../components/U_delete";
 
-it("place holder test ", () => {
-  const wrapped = shallow(<App />);
-  expect(wrapped.find(NavBar).length).toEqual(1);
+import Root from "Root";
+
+it("sign in test ", () => {
+  const wrapped = shallow(<NavBar />);
+  expect(wrapped.find("#login-button").length).toEqual(1);
 });

@@ -62,12 +62,6 @@ class NavBar extends Component {
     ]
   };
 
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.menu.places !== this.props.menu.places) {
-  //     this.setState({ menuOptions: this.props.menu.places });
-  //   }
-  // }
-
   componentDidMount() {
     this.props.placesInitialise();
 
