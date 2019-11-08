@@ -1,11 +1,17 @@
 import { connect } from "react-redux";
 import {
+  initialiseFirebase,
+  placesInitialise,
   setCardsVisible,
   setPlaceSelected,
   loadDataLocal,
   loadDataExternal,
   setIsLoggedIn
 } from "../actions";
+import { DB_CONFIG } from "../config/config";
+import app from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 
 import React, { Component } from "react";
 import Login from "./U_login";
@@ -18,6 +24,11 @@ import M from "materialize-css";
 class NavBar extends Component {
   constructor(props) {
     super(props);
+    app.initializeApp(DB_CONFIG);
+    this.db = app.firestore();
+    this.auth = app.auth();
+    this.props.initialiseFirebase(this.db, this.auth);
+
     this.createModal = React.createRef();
     this.state = {
       menuOptions: [],
@@ -54,9 +65,9 @@ class NavBar extends Component {
       }
     ]
   };
-  initDatePicker = minStartDate => {
-    //    this.createModal.current.initDatePicker(minStartDate);
-  };
+  // initDatePicker = minStartDate => {
+  //   //    this.createModal.current.initDatePicker(minStartDate);
+  // };
   componentDidUpdate(prevProps) {
     if (prevProps.menu.places !== this.props.menu.places) {
       this.setState({ menuOptions: this.props.menu.places });
@@ -64,6 +75,8 @@ class NavBar extends Component {
   }
 
   componentDidMount() {
+    this.props.placesInitialise();
+
     document.addEventListener("DOMContentLoaded", function() {
       const sideNav = document.querySelector(".sidenav");
       const sideMenu = M.Sidenav.init(sideNav, {});
@@ -78,9 +91,13 @@ class NavBar extends Component {
   };
 
   handlePlaceClick = event => {
-
-    const trip = this.props.cards.tripData.find(trip=> trip.id === this.props.cards.trip_id_selected);
-    this.props.setPlaceSelected(event.currentTarget.dataset.place, trip.country);
+    const trip = this.props.cards.tripData.find(
+      trip => trip.id === this.props.cards.trip_id_selected
+    );
+    this.props.setPlaceSelected(
+      event.currentTarget.dataset.place,
+      trip.country
+    );
     this.props.loadDataLocal(
       event.currentTarget.dataset.place,
       this.props.places.country_selected
@@ -168,20 +185,19 @@ class NavBar extends Component {
     );
   };
   currentMenuItems = () => {
-    
     // Current menu item depends on the state of authentication
     const mode = this.props.firebase.isLoggedIn ? "logged-in" : "logged-out";
     let menuItems = this.props.menuItems.filter(
       item => item.show_when === mode
     );
 
-    if (!this.props.cards.cardsVisible) {      
+    if (!this.props.cards.cardsVisible) {
       menuItems = menuItems.filter(item => item.remove_when_nocards === false);
     }
     //    cardsVisible
     //ACDEBUG
-    console.log("---------------------------------------------")
-    console.log("Menu items length:"+menuItems.length)
+    console.log("---------------------------------------------");
+    console.log("Menu items length:" + menuItems.length);
     return menuItems;
   };
   // handle logout
@@ -189,7 +205,7 @@ class NavBar extends Component {
     this.props.firebase.auth.signOut();
     this.setState({ menuOptions: [] });
     this.props.setIsLoggedIn(false);
-    this.props.setUser("");
+    // this.props.setUser("");
   };
   render() {
     return (
@@ -223,7 +239,8 @@ class NavBar extends Component {
                     </div>
                   </li>
                 )}
-                {this.props.firebase.isLoggedIn && !this.props.cards.cardsVisible &&
+                {this.props.firebase.isLoggedIn &&
+                  !this.props.cards.cardsVisible &&
                   this.state.menuOptions.map(this.showMenuPlace)}
                 {this.currentMenuItems().map(this.showMenuItem)}
                 {this.props.firebase.isLoggedIn && (
@@ -243,27 +260,14 @@ class NavBar extends Component {
         </nav>
         {/* // ---------------------------------------------------------------------
         // Modals */}
-        <Login
-          setUser={this.props.setUser}
-          id="modal-login"
-          user={this.props.user}
-        />
-        <SignUp
-          id="modal-signup"
-        />
-        <Create
-          ref={this.createModal}
-          setFlashMessage={this.props.setFlashMessage}
-          id="modal-create"
-          minStartDate={this.props.minStartDate}
-          excludeDates={this.props.excludeDates}
-          tripDates={this.props.tripDates}
-          //refresh={this.props.refresh}
-        />
+        <Login id="modal-login" />
+        <SignUp id="modal-signup" />
+        <Create ref={this.createModal} id="modal-create" />
         {/* // ---------------------------------------------------------------------
         // Sidenav */}
         <ul className="sidenav" id="mobile-nav">
-          {this.props.imageUrl && this.showImage(this.props.imageUrl)}
+          {this.props.cards.imageUrl &&
+            this.showImage(this.props.cards.imageUrl)}
           {this.props.firebase.isLoggedIn && (
             <li>
               <div
@@ -282,7 +286,8 @@ class NavBar extends Component {
               </div>
             </li>
           )}
-          {this.props.firebase.isLoggedIn && !this.props.cards.cardsVisible &&
+          {this.props.firebase.isLoggedIn &&
+            !this.props.cards.cardsVisible &&
             this.state.menuOptions.map(this.showMenuPlaceSide)}
           {this.currentMenuItems().map(this.showSideMenuItem)}
           {this.props.firebase.isLoggedIn && (
@@ -314,6 +319,8 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
+    initialiseFirebase,
+    placesInitialise,
     setCardsVisible,
     setPlaceSelected,
     loadDataLocal,

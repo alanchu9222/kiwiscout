@@ -57,9 +57,9 @@ class U_create extends Component {
     this.setState({ simpleModal: !this.state.simpleModal }); // true/false toggle
   };
 
-  initDatePicker = minStartDate => {
-    this.pickDate.current.setInitialDates(minStartDate, minStartDate);
-  };
+  // initDatePicker = minStartDate => {
+  //   this.pickDate.current.setInitialDates(minStartDate, minStartDate);
+  // };
 
   componentDidMount() {
     document.addEventListener(
@@ -248,7 +248,7 @@ class U_create extends Component {
           >
             <PickDate
               setDates={this.setDates}
-              minStartDate={this.props.minStartDate}
+              // minStartDate={this.props.minStartDate}
               excludeDates={this.props.excludeDates}
               ref={this.pickDate}
             />

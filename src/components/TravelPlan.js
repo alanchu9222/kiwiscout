@@ -28,7 +28,7 @@ class TravelPlan extends Component {
     if (menuItem.url && menuItem.phone) {
       return (
         <li className="z-depth-0 white grey-text listItem">
-          <a href={menuItem.url} target="_blank"  rel="noopener noreferrer">
+          <a href={menuItem.url} target="_blank" rel="noopener noreferrer">
             {menuItem.name}
           </a>
           + <FontAwesomeIcon icon={faPhone} size="1x" color="grey" /> +
@@ -97,10 +97,11 @@ class TravelPlan extends Component {
   render() {
     return (
       <div className="container travel-plan">
-        {!this.props.cards.cardsVisible && (
+        {this.props.firebase.isLoggedIn && !this.props.cards.cardsVisible && (
           <div className="grid-container">
             <h2 className="grid-header disable-select">
-              {this.props.places.place_selected} {this.props.places.country_selected}
+              {this.props.places.place_selected}{" "}
+              {this.props.places.country_selected}
             </h2>
             {this.props.places.currentData &&
               this.props.places.currentData.map(this.showTravelPanels)}
@@ -113,7 +114,7 @@ class TravelPlan extends Component {
 
 //export default TravelPlan;
 const mapStateToProps = state => {
-  return { cards: state.cards, places: state.places };
+  return { cards: state.cards, places: state.places, firebase: state.firebase };
 };
 export default connect(
   mapStateToProps,

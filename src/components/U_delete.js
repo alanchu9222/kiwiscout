@@ -37,10 +37,7 @@ class U_delete extends Component {
       .delete()
       .then(result => {
         // 1. Refresh the UI - cardsUpdated: TravelCards()
-        this.props.refreshCards(
-          this.props.firebase.db,
-          ""
-        );
+        this.props.refreshCards(this.props.firebase.db, "");
         this.props.setPlacesMenu([]);
       })
       .catch(err => {
@@ -65,23 +62,27 @@ class U_delete extends Component {
     return (
       <div>
         <div id="modal_delete" className="modal">
-          <div className="modal-content">
-            <p>{this.state.message}</p>
-          </div>
-          <div className="modal-footer">
-            <button
-              onClick={this.deleteCancelled}
-              className="button-delete button btn yellow darken-2 z-depth-1 waves-effect waves-light"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={this.deleteConfirmed}
-              className="button-delete button btn yellow darken-2 z-depth-1 waves-effect waves-light"
-            >
-              Ok
-            </button>
-          </div>
+          {this.props.firebase.isLoggedIn && (
+            <>
+              <div className="modal-content">
+                <p>{this.state.message}</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  onClick={this.deleteCancelled}
+                  className="button-delete button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={this.deleteConfirmed}
+                  className="button-delete button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+                >
+                  Ok
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     );

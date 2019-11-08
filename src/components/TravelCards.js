@@ -1,8 +1,8 @@
 import { connect } from "react-redux";
 import {
+  saveDataLocalStorage,
   setCardsVisible,
   setTripId,
-  // setCity,
   setCountry,
   setPlacesMenu,
   setPlaceSelected,
@@ -57,7 +57,7 @@ class TravelCards extends Component {
     this.props.setPlaceImageUrl(destRecord.imageUrl);
     this.props.setCardsVisible(false);
     this.setState({ city: city, country: destRecord.country });
-    console.log("Travel card clicked")
+    console.log("Travel card clicked");
     this.props.setPlaceSelected(city, destRecord.country);
     this.props.loadDataLocal(city, destRecord.country);
     const searchKey = city + "-" + destRecord.country;
@@ -97,6 +97,20 @@ class TravelCards extends Component {
   //   );
   // }
   componentDidUpdate(prevProps) {
+    // Detects the state updateLocalStorage
+    if (
+      prevProps.places.updateLocalStorage !==
+      this.props.places.updateLocalStorage
+    ) {
+      //    SAVE_LOCALSTORAGE - if a key is provided, then save the local storage
+      if (this.props.places.updateLocalStorage) {
+        this.props.saveDataLocalStorage(
+          this.props.places.updateLocalStorage,
+          this.props.places.currentData
+        );
+      }
+    }
+
     // Detects the state for database and auth
     if (prevProps.firebase !== this.props.firebase) {
       this.props.refreshCards(
@@ -123,7 +137,8 @@ class TravelCards extends Component {
       <div>
         <div className="CardDeck">
           <div className="Trip-cards">
-            {this.props.cards.cardsVisible &&
+            {this.props.firebase.isLoggedIn &&
+              this.props.cards.cardsVisible &&
               this.props.cards.tripData.map(p => (
                 <Tripcard
                   key={p.country + p.city}
@@ -154,9 +169,9 @@ const mapStateToProps = state => {
 export default connect(
   mapStateToProps,
   {
+    saveDataLocalStorage,
     setCardsVisible,
     setTripId,
-    // setCity,
     setCountry,
     setPlacesMenu,
     setPlaceSelected,

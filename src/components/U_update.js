@@ -1,9 +1,5 @@
 import { connect } from "react-redux";
-import {
-  setPlacesMenu,
-  updateDone,
-  refreshCards
-} from "../actions";
+import { setPlacesMenu, updateDone, refreshCards } from "../actions";
 
 import React, { Component } from "react";
 import "./U_update.css";
@@ -137,91 +133,92 @@ class U_update extends Component {
   render() {
     return (
       <div id="modal-update" className="modal">
-        <div className="modal-content">
-          <form
-            autoComplete="off"
-            id="update-form"
-            onSubmit={this.handleSubmit}
-          >
-            <PickDate
-              setDates={this.setDates}
-              trip={this.tripData}
-              ref={this.pickDate}
-              minStartDate={null}
-              excludeDates={[]}
-            />
-            <div className="flex-container">
-              <div className="form-header">
-                <h5>
-                  {this.state.tripData.city +
-                    "   " +
-                    this.state.tripData.country +
-                    " (update Local Places of Interest)"}
-                </h5>
-              </div>
-              <div className="input-field">
-                <textarea
-                  id="update_poi1"
-                  className="materialize-textarea"
-                  onChange={this.handlePlaceChange}
-                  name="poi1"
-                  value={this.state.poi1}
-                />
-
-                <label htmlFor="update_poi1"></label>
-              </div>
-              <div className="spacer" />
-
-              <div className="input-field">
-                <textarea
-                  id="update_poi2"
-                  className="materialize-textarea"
-                  onChange={this.handlePlaceChange}
-                  name="poi2"
-                  value={this.state.poi2}
-                />
-                <label htmlFor="update_poi2"></label>
-              </div>
-              <div className="spacer" />
-
-              <div className="input-field">
-                <textarea
-                  id="update_poi3"
-                  className="materialize-textarea"
-                  onChange={this.handlePlaceChange}
-                  name="poi3"
-                  value={this.state.poi3}
-                />
-                <label htmlFor="update_poi3"></label>
-              </div>
-              <div className="spacer" />
-
-              <div className="input-field">
-                <textarea
-                  id="update_poi4"
-                  className="materialize-textarea"
-                  onChange={this.handlePlaceChange}
-                  name="poi4"
-                  value={this.state.poi4}
-                />
-                <label htmlFor="update_poi4"></label>
-              </div>
-            </div>
-
-            <button
-              onClick={this.handleSubmit}
-              className="button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+        {this.props.firebase.isLoggedIn && (
+          <div className="modal-content">
+            <form
+              autoComplete="off"
+              id="update-form"
+              onSubmit={this.handleSubmit}
             >
-              Update
-            </button>
-            <button
-              onClick={this.closeForm}
-              className="button btn yellow darken-2 z-depth-1 waves-effect waves-light"
-            >
-              Cancel
-            </button>
-          </form>
-        </div>
+              <PickDate
+                setDates={this.setDates}
+                trip={this.tripData}
+                ref={this.pickDate}
+                // minStartDate={null}
+              />
+              <div className="flex-container">
+                <div className="form-header">
+                  <h5>
+                    {this.state.tripData.city +
+                      "   " +
+                      this.state.tripData.country +
+                      " (update Local Places of Interest)"}
+                  </h5>
+                </div>
+                <div className="input-field">
+                  <textarea
+                    id="update_poi1"
+                    className="materialize-textarea"
+                    onChange={this.handlePlaceChange}
+                    name="poi1"
+                    value={this.state.poi1}
+                  />
+
+                  <label htmlFor="update_poi1"></label>
+                </div>
+                <div className="spacer" />
+
+                <div className="input-field">
+                  <textarea
+                    id="update_poi2"
+                    className="materialize-textarea"
+                    onChange={this.handlePlaceChange}
+                    name="poi2"
+                    value={this.state.poi2}
+                  />
+                  <label htmlFor="update_poi2"></label>
+                </div>
+                <div className="spacer" />
+
+                <div className="input-field">
+                  <textarea
+                    id="update_poi3"
+                    className="materialize-textarea"
+                    onChange={this.handlePlaceChange}
+                    name="poi3"
+                    value={this.state.poi3}
+                  />
+                  <label htmlFor="update_poi3"></label>
+                </div>
+                <div className="spacer" />
+
+                <div className="input-field">
+                  <textarea
+                    id="update_poi4"
+                    className="materialize-textarea"
+                    onChange={this.handlePlaceChange}
+                    name="poi4"
+                    value={this.state.poi4}
+                  />
+                  <label htmlFor="update_poi4"></label>
+                </div>
+              </div>
+
+              <button
+                onClick={this.handleSubmit}
+                className="button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+              >
+                Update
+              </button>
+              <button
+                onClick={this.closeForm}
+                className="button btn yellow darken-2 z-depth-1 waves-effect waves-light"
+              >
+                Cancel
+              </button>
+            </form>
+          </div>
+        )}
       </div>
     );
   }

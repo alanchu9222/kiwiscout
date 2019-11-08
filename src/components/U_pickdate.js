@@ -28,7 +28,7 @@ export class PickDate extends Component {
   }
   handleChangeStart = startDate => {
     this.setState({
-      startDate: startDate      
+      startDate: startDate
     });
     this.props.setDates(startDate, this.state.endDate);
   };
@@ -56,8 +56,7 @@ export class PickDate extends Component {
               enabled: false // turn off since needs preventOverflow to be enabled
             }
           }}
-          minDate={this.props.minStartDate}
-          excludeDates={this.props.excludeDates}
+          // minDate={this.props.minStartDate}
           dateFormat="dd/MM/yyyy"
           selected={this.state.startDate}
           selectsStart
@@ -65,30 +64,6 @@ export class PickDate extends Component {
           endDate={this.state.endDate}
           onChange={this.handleChangeStart}
         />
-        {/* <span className="endDate">End Date</span> */}
-        {/* <DatePicker
-          popperPlacement="bottom"
-          popperModifiers={{
-            flip: {
-              behavior: ["bottom"] // don't allow it to flip to be above
-            },
-            preventOverflow: {
-              enabled: false // tell it not to try to stay within the view (this prevents the popper from covering the element you clicked)
-            },
-            hide: {
-              enabled: false // turn off since needs preventOverflow to be enabled
-            }
-          }}
-          dateFormat="dd/MM/yyyy"
-          selected={this.state.endDate}
-          selectsEnd
-          startDate={this.state.startDate}
-          endDate={this.state.endDate}
-          onChange={this.handleChangeEnd}
-          // minimum date is from startdate onwards
-          minDate={this.state.startDate}
-          excludeDates={this.props.excludeDates}
-        /> */}
       </div>
     );
   }

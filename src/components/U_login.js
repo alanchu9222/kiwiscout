@@ -57,8 +57,6 @@ class U_login extends Component {
         // close the signup modal & reset form
         const modal = document.querySelector("#modal-login");
         this.props.setIsLoggedIn(true);
-        this.props.setUser(email);
-
         M.Modal.getInstance(modal).close();
         this.loginForm.current.reset();
       })

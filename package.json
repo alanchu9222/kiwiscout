@@ -14,8 +14,11 @@
     "@material-ui/styles": "^4.4.1",
     "axion": "^0.1.0",
     "axios": "^0.19.0",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.15.1",
     "firebase": "^6.3.4",
     "javascript-autocomplete": "^1.0.5",
+    "jquery": "^3.4.1",
     "material-ui": "^0.20.2",
     "materialize-css": "^1.0.0",
     "react": "^16.8.6",
@@ -31,7 +34,8 @@
     "serve": "^11.2.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
+    "start": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

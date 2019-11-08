@@ -4,9 +4,8 @@ import locationiq from "../apis/geolocation";
 import { LOCATIONIQ_KEY } from "../apis/apikeys";
 // import app from "firebase/app";
 // import { DB_CONFIG } from "../config/config";
-
-import "firebase/auth";
-import "firebase/firestore";
+// import "firebase/auth";
+// import "firebase/firestore";
 
 import {
   SET_IS_LOGGED_IN,
@@ -31,7 +30,6 @@ import {
   ADD_COORDINATES,
   INITIALISE_FIREBASE
 } from "./types";
-
 
 export const refreshCards = (db, trip_id_selected) => async dispatch => {
   // FOr asyn function, its ok to dispatch multiiple messages
@@ -87,7 +85,6 @@ export const refreshCards = (db, trip_id_selected) => async dispatch => {
     console.log(err.message);
   }
 };
-
 
 const searchCriteria = [
   { title: "LOCAL ATTRACTIONS", searchKey: "attractions" },
@@ -258,7 +255,7 @@ export const setPlacesMenu = places => {
 };
 
 export const setPlaceSelected = (place, country) => {
-  const payload = {place:place, country:country};
+  const payload = { place: place, country: country };
   return { type: SET_PLACE_SELECTED, payload: payload };
 };
 
@@ -282,4 +279,3 @@ export const initialiseFirebase = (db, auth) => {
   };
   return { type: INITIALISE_FIREBASE, payload: payload };
 };
-
