@@ -36,7 +36,7 @@ class NavBar extends Component {
     menuItems: [
       {
         list_id: "create",
-        menu_id: "create-button",
+        menu_id: "button-create",
         target: "modal-create",
         description: "Add Destination",
         show_when: "logged-in",
@@ -44,7 +44,7 @@ class NavBar extends Component {
       },
       {
         list_id: "login",
-        menu_id: "login-button",
+        menu_id: "button-login",
         target: "modal-login",
         description: "Login",
         remove_when_nocards: false,
@@ -52,7 +52,7 @@ class NavBar extends Component {
       },
       {
         list_id: "signup",
-        menu_id: "signup-button",
+        menu_id: "button-signup",
         target: "modal-signup",
         description: "Sign Up",
         remove_when_nocards: false,
@@ -173,6 +173,7 @@ class NavBar extends Component {
   currentMenuItems = () => {
     // Current menu item depends on the state of authentication
     const mode = this.props.firebase.isLoggedIn ? "logged-in" : "logged-out";
+
     let menuItems = this.props.menuItems.filter(
       item => item.show_when === mode
     );
@@ -217,7 +218,7 @@ class NavBar extends Component {
                         this.props.setCardsVisible(true);
                       }}
                       className="nav-button z-depth-0 white-text waves-effect waves-light"
-                      id="nav-logout"
+                      id="button-main-top"
                     >
                       Main
                     </div>
@@ -233,7 +234,7 @@ class NavBar extends Component {
                     <div
                       onClick={this.handleLogout}
                       className="nav-button z-depth-0 white-text waves-effect waves-light"
-                      id="nav-logout"
+                      id="button-logout-top"
                     >
                       Logout
                     </div>
@@ -265,7 +266,7 @@ class NavBar extends Component {
                   }
                 }}
                 className="nav-button side-button z-depth-0 teal-text waves-effect waves-light"
-                id="nav-logout"
+                id="button-main-side"
               >
                 Main
               </div>
@@ -283,7 +284,7 @@ class NavBar extends Component {
               <div
                 className="z-depth-0 teal-text waves-effect waves-light nav-button side-button"
                 onClick={this.handleLogout}
-                id="side-logout"
+                id="button-logout-side"
               >
                 Logout
               </div>

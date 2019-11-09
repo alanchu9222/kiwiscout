@@ -1,14 +1,14 @@
-import React from "react";
-import App from "../App";
-import { shallow } from "enzyme";
-import NavBar from "../components/NavBar";
-import TravelPlan from "../components/TravelPlan";
-import TravelCards from "../components/TravelCards";
-import Flash from "../components/Flash";
-import Update from "../components/U_update";
-import Delete from "../components/U_delete";
+import { setCardsVisible } from "../actions";
+import { SET_CARDS_VISIBLE } from "../actions/types";
 
-it("place holder test ", () => {
-  const wrapped = shallow(<App />);
-  expect(wrapped.find(NavBar).length).toEqual(1);
+describe("setCardsVisible", () => {
+  it("correctly creates the action for cards visible", () => {
+    const action = setCardsVisible(false);
+    expect(action.type).toEqual(SET_CARDS_VISIBLE);
+  });
+
+  it("has the correct payload", () => {
+    const action = setCardsVisible(true);
+    expect(action.payload).toEqual(true);
+  });
 });

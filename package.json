@@ -21,6 +21,7 @@
     "jquery": "^3.4.1",
     "material-ui": "^0.20.2",
     "materialize-css": "^1.0.0",
+    "moxios": "^0.4.0",
     "react": "^16.8.6",
     "react-autosuggest": "^9.4.3",
     "react-datepicker": "^2.8.0",
@@ -30,6 +31,7 @@
     "react-scripts": "3.0.1",
     "react-themeable": "^1.1.0",
     "redux": "^4.0.4",
+    "redux-mock-store": "^1.5.3",
     "redux-thunk": "^2.3.0",
     "serve": "^11.2.0"
   },

@@ -14,11 +14,6 @@ class App extends React.Component {
     flashMessage: "Welcome to the Local Travel Guide - please log in to begin"
   };
 
-  componentDidUpdate(prevProps) {
-    if (this.state.refresh === true) {
-      this.setState({ refresh: false });
-    }
-  }
   render() {
     return (
       <div className="App-main">

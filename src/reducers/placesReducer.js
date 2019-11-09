@@ -12,7 +12,6 @@ import {
 } from "../actions/types";
 const INITIAL_STATE_PLACES = {
   placesInLocalStore: [],
-  currentExternalData: [],
   updateLocalStorage: undefined,
   coordinates: {}
 };
@@ -22,7 +21,11 @@ export default (state = INITIAL_STATE_PLACES, action) => {
     case SET_COUNTRY:
       return { ...state, country_selected: action.payload };
     case SET_PLACE_SELECTED:
-      return { ...state, place_selected: action.payload.place, country_selected: action.payload.country };
+      return {
+        ...state,
+        place_selected: action.payload.place,
+        country_selected: action.payload.country
+      };
     case SET_IMAGE_URL:
       return { ...state, image_url: action.payload };
     case INITIALISE_PLACES:
@@ -33,8 +36,8 @@ export default (state = INITIAL_STATE_PLACES, action) => {
     case ADD_COORDINATES:
       let newcoordinates = state.coordinates;
       newcoordinates[action.payload.key] = action.payload.coordinates;
-      console.log("List of coordinates in the system:")
-      console.log(newcoordinates)
+      console.log("List of coordinates in the system:");
+      console.log(newcoordinates);
       return { ...state, coordinates: newcoordinates };
     case SAVE_LOCALSTORAGE_DONE:
       return { ...state, updateLocalStorage: undefined };

@@ -13,6 +13,7 @@ class U_update extends Component {
 
   constructor(props) {
     super(props);
+    this.modalUpdateRef = React.createRef();
     this.pickCity = React.createRef();
     this.pickDate = React.createRef();
     this.state = {
@@ -65,8 +66,9 @@ class U_update extends Component {
   componentDidMount() {
     const elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, { dismissable: true });
-    const modalUpdate = document.querySelector("#modal-update");
-    const instance2 = M.Modal.getInstance(modalUpdate);
+    //    const modalUpdate = document.querySelector("#modal-update");
+    //    const instance2 = M.Modal.getInstance(modalUpdate);
+    const instance2 = M.Modal.getInstance(this.modalUpdateRef.current);
     this.setState({ modalUpdate: instance2 });
   }
   setDates = (start, end) => {
@@ -132,7 +134,7 @@ class U_update extends Component {
   };
   render() {
     return (
-      <div id="modal-update" className="modal">
+      <div id="modal-update" className="modal" ref={this.modalUpdateRef}>
         {this.props.firebase.isLoggedIn && (
           <div className="modal-content">
             <form

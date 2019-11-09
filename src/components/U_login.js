@@ -45,6 +45,7 @@ class U_login extends Component {
     const password = this.state.password;
     this.setState({ spinner: "spinner" });
     console.log("LOG IN USER");
+
     // log the user in
     this.props.firebase.auth
       .signInWithEmailAndPassword(email, password)

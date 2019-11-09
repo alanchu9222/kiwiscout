@@ -13,6 +13,7 @@ import M from "materialize-css";
 class U_delete extends Component {
   constructor(props) {
     super(props);
+    this.modalDeleteRef = React.createRef();
     this.state = { modalDelete: "", message: "" };
   }
   // The parent will trigger a delete process from this method
@@ -49,8 +50,9 @@ class U_delete extends Component {
   componentDidMount() {
     var elems = document.querySelectorAll(".modal");
     M.Modal.init(elems, {});
-    const modalDelete = document.querySelector("#modal_delete");
-    const instance = M.Modal.getInstance(modalDelete);
+    // const modalDelete = document.querySelector("#modal_delete");
+    // const instance = M.Modal.getInstance(modalDelete);
+    const instance = M.Modal.getInstance(this.modalDeleteRef.current);
     this.setState({ modalDelete: instance });
   }
   componentDidUpdate() {
@@ -61,7 +63,7 @@ class U_delete extends Component {
   render() {
     return (
       <div>
-        <div id="modal_delete" className="modal">
+        <div id="modal_delete" className="modal" ref={this.modalDeleteRef}>
           {this.props.firebase.isLoggedIn && (
             <>
               <div className="modal-content">

@@ -2,7 +2,7 @@ import tomtom from "../apis/tomtom";
 import { TOMTOM_KEY } from "../apis/apikeys";
 import locationiq from "../apis/geolocation";
 import { LOCATIONIQ_KEY } from "../apis/apikeys";
-
+import axios from "axios";
 import {
   SET_IS_LOGGED_IN,
   SET_CARDS_VISIBLE,
@@ -95,11 +95,18 @@ export const loadDataExternal = (location, country) => async dispatch => {
   // Get Coordinates
   let coordinates = {};
   let coordinatesFound = false;
-  console.log("Loading external data for :" + location + "-" + country);
   try {
+    // console.log(
+    //   `https://us1.locationiq.com/v1/${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
+    // );
+    // const resp = await axios.get(
+    //   `https://us1.locationiq.com/v1/${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
+    // );
+
     const resp = await locationiq.get(
       `${LOCATIONIQ_KEY}&q=${location}%20${country}&format=json`
     );
+
     coordinates = {
       key: `${location}-${country}`,
       coordinates: {
@@ -107,6 +114,7 @@ export const loadDataExternal = (location, country) => async dispatch => {
         longitude: resp.data[0].lon
       }
     };
+
     console.log("Coordinates found for :" + location + "-" + country);
 
     coordinatesFound = true;
