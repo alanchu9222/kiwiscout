@@ -18,13 +18,13 @@ describe("Login Test", () => {
     wrapped.update();
 
     const mainNavbar = wrapped.find("#nav-mobile");
-    console.log(mainNavbar.debug());
-    console.log(
-      mainNavbar
-        .find("#button-login")
-        .first()
-        .debug()
-    );
+    // console.log(mainNavbar.debug());
+    // console.log(
+    //   mainNavbar
+    //     .find("#button-login")
+    //     .first()
+    //     .debug()
+    // );
     expect(mainNavbar.find("#button-login").first().length).toEqual(1);
     mainNavbar
       .find("#button-login")
