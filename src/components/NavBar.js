@@ -13,7 +13,7 @@ import { DB_CONFIG } from "../config/config";
 import app from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
-
+import history from "../history";
 import React, { Component } from "react";
 import Login from "./U_login";
 import Create from "./U_create";
@@ -101,6 +101,7 @@ class NavBar extends Component {
     }
 
     this.handleSideMenuClick();
+    history.push("/travel-guide/show/" + searchKey);
     this.props.setCardsVisible(false);
   };
   showMenuItem = menuItem => {
@@ -215,6 +216,7 @@ class NavBar extends Component {
                   <li>
                     <div
                       onClick={() => {
+                        history.push("/");
                         this.props.setCardsVisible(true);
                       }}
                       className="nav-button z-depth-0 white-text waves-effect waves-light"
@@ -264,6 +266,7 @@ class NavBar extends Component {
                   if (sidenavInstance) {
                     sidenavInstance.close();
                   }
+                  history.push("/");
                 }}
                 className="nav-button side-button z-depth-0 teal-text waves-effect waves-light"
                 id="button-main-side"

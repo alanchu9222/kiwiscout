@@ -1,9 +1,11 @@
+import history from "./history";
+import { Redirect, Router, Route, Switch } from "react-router-dom";
+
 import React from "react";
 import NavBar from "./components/NavBar";
 import TravelPlan from "./components/TravelPlan";
 import TravelCards from "./components/TravelCards";
 import Instructions from "./components/Instructions";
-
 import Flash from "./components/Flash";
 import Update from "./components/U_update";
 import Delete from "./components/U_delete";
@@ -16,15 +18,20 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App-main">
-        <NavBar />
-        <Flash message={this.state.flashMessage} />
-        <Instructions />
-        <Delete />
-        <Update />
-        <TravelCards />
-        <TravelPlan className="travel-plan" />
-      </div>
+      <Router history={history}>
+        <div className="App-main">
+          <NavBar />
+          <Flash message={this.state.flashMessage} />
+          <Instructions />
+          <Delete />
+          <Update />
+          <Switch>
+            <Redirect exact from="/" to="/trips" />
+            <Route exact path="/trips" component={TravelCards} />
+            <Route exact path="/travel-guide/show/:id" component={TravelPlan} />
+          </Switch>
+        </div>
+      </Router>
     );
   }
 }

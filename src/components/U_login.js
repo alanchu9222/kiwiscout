@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { setIsLoggedIn } from "../actions";
-
+import history from "../history";
 import React, { Component } from "react";
 import SimpleModal from "./SimpleModal";
 import "./SimpleModal.css";
@@ -56,6 +56,7 @@ class U_login extends Component {
         const modal = document.querySelector("#modal-login");
         this.props.setIsLoggedIn(true);
         M.Modal.getInstance(modal).close();
+        history.push("/");
         this.loginForm.current.reset();
       })
       .catch(err => {

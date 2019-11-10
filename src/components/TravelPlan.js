@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { loadDataExternal } from "../actions";
+import { loadDataExternal, setPlaceSelected, loadDataLocal } from "../actions";
 
 import React, { Component } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,6 +12,25 @@ class TravelPlan extends Component {
     super(props);
     this.collapsible = React.createRef();
     this.tripRecord = [];
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.id !== this.props.match.params.id) {
+      console.log("Reloading view for " + this.props.match.params.id);
+      const place = this.props.match.params.id.split("-")[0];
+      const country = this.props.match.params.id.split("-")[1];
+
+      this.props.setPlaceSelected(place, country);
+      this.props.loadDataLocal(place, country);
+
+      if (
+        !this.props.places.placesInLocalStore.includes(
+          this.props.match.params.id
+        )
+      ) {
+        this.props.loadDataExternal(place, country);
+      }
+    }
   }
 
   state = {
@@ -118,5 +137,5 @@ const mapStateToProps = state => {
 };
 export default connect(
   mapStateToProps,
-  { loadDataExternal }
+  { loadDataExternal, setPlaceSelected, loadDataLocal }
 )(TravelPlan);

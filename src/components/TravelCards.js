@@ -14,7 +14,7 @@ import {
   deleteTrip,
   refreshCards
 } from "../actions";
-
+import history from "../history";
 import React, { Component } from "react";
 import Tripcard from "./Tripcard";
 import "./TravelCards.css";
@@ -67,6 +67,7 @@ class TravelCards extends Component {
     if (!this.props.places.placesInLocalStore.includes(searchKey)) {
       this.props.loadDataExternal(city, destRecord.country);
     }
+    history.push("/travel-guide/show/" + searchKey);
   };
   handleCardDelete = docId => {
     const destRecord = this.props.cards.tripData.find(record => {
