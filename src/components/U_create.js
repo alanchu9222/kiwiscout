@@ -243,74 +243,78 @@ class U_create extends Component {
             id="create-form"
             onSubmit={this.handleSubmit}
           >
-            <PickDate
-              setDates={this.setDates}
-              // minStartDate={this.props.minStartDate}
-              excludeDates={this.props.excludeDates}
-              ref={this.pickDate}
-            />
-            <div className="b1">
-              <PickCountry
-                ref={this.pickCountry}
-                setDestination={this.setDestinationCountry}
+            <div className="create-grid-container">
+              <PickDate
+                className="pick-date"
+                setDates={this.setDates}
+                minStartDate={this.props.minStartDate}
+                //excludeDates={this.props.excludeDates}
+                ref={this.pickDate}
               />
-            </div>
-            <div className="b2">
-              <PickCity
-                ref={this.pickCity}
-                country={this.state.country}
-                setDestination={this.setDestinationCity}
-              />
-            </div>
-            <div className="flex-container">
-              <div className="input-field">
+
+              <div className="pick-country">
+                <PickCountry
+                  ref={this.pickCountry}
+                  setDestination={this.setDestinationCountry}
+                />
+              </div>
+              <div className="pick-city">
+                <PickCity
+                  ref={this.pickCity}
+                  country={this.state.country}
+                  setDestination={this.setDestinationCity}
+                />
+              </div>
+              {/* <div className="flex-container"> */}
+              <div className="input-field poi1-box">
                 <textarea
                   id="create_poi1"
-                  className="materialize-textarea"
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi1"
                 />
 
                 <label htmlFor="create_poi1">Place of Interest 1</label>
               </div>
-              <div className="spacer" />
+              {/* <div className="spacer" /> */}
 
-              <div className="input-field">
+              <div className="input-field poi2-box">
                 <textarea
                   id="create_poi2"
-                  className="materialize-textarea"
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi2"
                 />
                 <label htmlFor="create_poi2">Place of Interest 2</label>
               </div>
-              <div className="spacer" />
+              {/* <div className="spacer" /> */}
 
-              <div className="input-field">
+              <div className="input-field poi3-box">
                 <textarea
                   id="create_poi3"
-                  className="materialize-textarea"
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi3"
                 />
                 <label htmlFor="create_poi3">Place of Interest 3</label>
               </div>
-              <div className="spacer" />
+              {/* <div className="spacer" /> */}
 
-              <div className="input-field">
+              <div className="input-field poi4-box">
                 <textarea
-                  id="create_poi4"
-                  className="materialize-textarea"
+                  id="create_poi4 "
+                  className="materialize-textarea "
                   onChange={this.handlePlaceChange}
                   name="poi4"
                 />
                 <label htmlFor="create_poi4">Place of Interest 4</label>
+                {/* </div> */}
               </div>
-            </div>
 
-            <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light">
-              Submit
-            </button>
+              <button className="button btn yellow darken-2 z-depth-1 waves-effect waves-light button-box">
+                Submit
+              </button>
+            </div>
           </form>
         </div>
       </div>
