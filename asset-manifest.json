@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/kiwiscout/static/css/main.de9dee24.chunk.css",
+    "main.js": "/kiwiscout/static/js/main.4244d574.chunk.js",
+    "main.js.map": "/kiwiscout/static/js/main.4244d574.chunk.js.map",
+    "runtime~main.js": "/kiwiscout/static/js/runtime~main.cc02c62e.js",
+    "runtime~main.js.map": "/kiwiscout/static/js/runtime~main.cc02c62e.js.map",
+    "static/css/2.cc034990.chunk.css": "/kiwiscout/static/css/2.cc034990.chunk.css",
+    "static/js/2.68475a4a.chunk.js": "/kiwiscout/static/js/2.68475a4a.chunk.js",
+    "static/js/2.68475a4a.chunk.js.map": "/kiwiscout/static/js/2.68475a4a.chunk.js.map",
+    "index.html": "/kiwiscout/index.html",
+    "precache-manifest.d234a3b9e678fb5b86597658f089115b.js": "/kiwiscout/precache-manifest.d234a3b9e678fb5b86597658f089115b.js",
+    "service-worker.js": "/kiwiscout/service-worker.js",
+    "static/css/2.cc034990.chunk.css.map": "/kiwiscout/static/css/2.cc034990.chunk.css.map",
+    "static/css/main.de9dee24.chunk.css.map": "/kiwiscout/static/css/main.de9dee24.chunk.css.map"
+  }
+}
